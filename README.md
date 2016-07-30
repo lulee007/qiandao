@@ -1,3 +1,29 @@
+## 自动签到--树莓派版
+1. 修改签到重试间隔时间为1 3 6 min
+2. 替换邮件发送为自己邮箱模式
+    邮箱配置文件 `config.conf`:
+    ```
+    [email]
+    mail_host = smtp.126.com
+    mail_user = xiaoming
+    mail_pass = xxxx
+    mail_postfix = 126.com
+    ```
+
+### 安装
+```bash
+apt-get install python-dev
+virtualenv ./
+source ./bin/activate
+pip install http://cdn.mysql.com/Downloads/Connector-Python/mysql-connector-python-2.0.4.zip#md5=3df394d89300db95163f17c843ef49df
+pip install tornado u-msgpack-python jinja2 chardet requests mysql-connector-python redis pbkdf2 pycrypto
+mysql < qiandao.sql
+./worker.py &
+./web.py
+```
+
+***************
+
 qiandao
 =======
 

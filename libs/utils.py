@@ -123,38 +123,30 @@ def utf8(string):
 import urllib
 import config
 from tornado import httpclient
+import smtplib
+from email.mime.text import MIMEText
 
 def send_mail(to, subject, text=None, html=None, async=False, _from=u"签到提醒 <noreply@mail.qiandao.today>"):
-    if not config.mailgun_key:
-        return
-
-    httpclient.AsyncHTTPClient.configure('tornado.curl_httpclient.CurlAsyncHTTPClient')
-    if async:
-        client = httpclient.AsyncHTTPClient()
-    else:
-        client = httpclient.HTTPClient()
-
-    body = {
-            'from': utf8(_from),
-            'to': utf8(to),
-            'subject': utf8(subject),
-            }
-
+    me = config.mail_user + "<" + config.mail_user + "@" + config.mail_postfix + ">"
     if text:
-        body['text'] = utf8(text)
+        msg = MIMEText(utf8(text))
     elif html:
-        body['html'] = utf8(html)
+        msg = MIMEText(utf8(html))
     else:
-        raise Exception('nedd text or html')
-
-    req = httpclient.HTTPRequest(
-            method = "POST",
-            url = "https://api.mailgun.net/v2/mail.qiandao.today/messages",
-            auth_username = "api",
-            auth_password = config.mailgun_key,
-            body = urllib.urlencode(body)
-            )
-    return client.fetch(req)
+        raise Exception('need text or html')
+    msg['Subject'] = subject
+    msg['From'] = me
+    msg['To'] = utf8(to)
+    try:
+        s = smtplib.SMTP()
+        s.connect(config.mail_host)
+        s.login(config.mail_user, config.mail_pass)
+        s.sendmail(me, utf8(to), msg.as_string())
+        s.close()
+        return True
+    except Exception, e:
+        print str(e)
+        return False
 
 import chardet
 from requests.utils import get_encoding_from_headers, get_encodings_from_content

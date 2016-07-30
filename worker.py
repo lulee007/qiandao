@@ -77,15 +77,15 @@ class MainWorker(object):
     @staticmethod
     def failed_count_to_time(last_failed_count, interval=None):
         if last_failed_count == 0:
-            next = 10 * 60
+            next = 1 * 60
         elif last_failed_count == 1:
-            next = 110 * 60
+            next = 3 * 60
         elif last_failed_count == 2:
-            next = 240 * 60
-        elif last_failed_count == 3:
-            next = 360 * 60
-        elif last_failed_count < 8:
-            next = 11 * 60 * 60
+            next = 6 * 60
+        # elif last_failed_count == 3:
+        #     next = 10 * 60
+        # elif last_failed_count < 8:
+        #     next = 11 * 60 * 60
         else:
             next = None
 
@@ -198,17 +198,16 @@ class MainWorker(object):
                     next=next)
             self.db.tpl.incr_failed(tpl['id'])
 
-            if task['success_count'] and task['last_failed_count'] and user['email_verified'] and user['email']\
-                    and self.is_tommorrow(next):
+            if task['success_count'] and task['last_failed_count'] and user['email_verified'] and user['email']:
                 try:
-                    _ = yield utils.send_mail(to=user['email'], subject=u"%s - 签到失败%s" % (
+                    _ = yield utils.send_mail(to=user['email'], subject=u"签到邮件 - %s - %s" % (
                         tpl['sitename'], u' 已停止' if disabled else u""),
                     text=u"""
 您的 %(sitename)s [ %(siteurl)s ] 签到任务，执行 %(cnt)d次 失败。%(disable)s
 
 下一次重试在一天之后，为防止签到中断，给您发送这份邮件。
 
-访问： http://qiandao.today/task/%(taskid)s/log 查看日志。
+请管理员到后台查看日志。
                     """ % dict(
                         sitename = tpl['sitename'] or u'未命名',
                         siteurl = tpl['siteurl'] or u'',
