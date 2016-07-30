@@ -3,11 +3,11 @@
 2. 替换邮件发送为自己邮箱模式
     邮箱配置文件 `config.conf`:  
     ```
-    [email]
-    mail_host = smtp.126.com
-    mail_user = xiaoming
-    mail_pass = xxxx
-    mail_postfix = 126.com
+    [email]  
+    mail_host = smtp.126.com  
+    mail_user = xiaoming  
+    mail_pass = xxxx  
+    mail_postfix = 126.com  
     ```
 
 ### 安装
