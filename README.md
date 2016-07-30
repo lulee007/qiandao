@@ -1,7 +1,7 @@
 ## 自动签到--树莓派版
 1. 修改签到重试间隔时间为1 3 6 min
 2. 替换邮件发送为自己邮箱模式
-    邮箱配置文件 `config.conf`:
+    邮箱配置文件 `config.conf`:  
     ```
     [email]
     mail_host = smtp.126.com
