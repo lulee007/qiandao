@@ -9,6 +9,11 @@
     mail_pass = xxxx  
     mail_postfix = 126.com  
     ```
+**注意**
+现在网易邮箱需要开启客户端授权码才能发送邮件，否则会出现503错误。
+>授权码
+ 授权码是用于登录第三方邮件客户端的专用密码。
+ 适用于登录以下服务: POP3/IMAP/SMTP/Exchange/CardDAV/CalDAV服务。
 
 ### 安装
 ```bash
