@@ -186,7 +186,7 @@ def decode(content, headers=None):
         return content
 
     try:
-        return content.decode(encoding)
+        return content.decode(encoding, 'replace')
     except Exception as e:
         return None
 
